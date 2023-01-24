@@ -1,0 +1,69 @@
+#spring.application.name: customer-service
+#server.port: 8080
+logging.level.root: INFO
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+#        exclude: "env,beans"
+    jmx:
+      exposure:
+        include: "*"
+spring.main.lazy-initialization: false
+
+### explicit binding creation
+# spring.cloud.stream.input-bindings: fooin;barin
+# context.getBean("fooin-in-0" , MessageChannel.class) 
+# context.getBean("barin-in-0" , MessageChannel.class) 
+# spring.cloud.stream.output-bindings: fooout;barout
+# context.getBean("fooout-out-0" , MessageChannel.class) 
+# context.getBean("barout-out-0" , MessageChannel.class) 
+#
+### Binding Service Properties
+## These properties are exposed via org.springframework.cloud.stream.config.BindingServiceProperties
+## must be prefixed with spring.cloud.stream.
+## instanceCount/instanceIndex/dynamicDestinations/defaultBinder/overrideCloudConnectors/bindingRetryInterval
+### Binding properties 
+## These properties are exposed via org.springframework.cloud.stream.config.BindingProperties
+## Binding properties are supplied using the format spring.cloud.stream.bindings.<channelName>.<property>=<value>. 
+## The <channelName> represents the name of the channel being configured (e.g., output for a Source).
+## Properties for Use of Spring Cloud Stream
+## destination /  group  /  contentType  /binder 
+### setting values for all bindings, 
+#   spring.cloud.stream.default.<property>=<value> 
+#   and 
+#   spring.cloud.stream.default.<producer|consumer>.<property>=<value>
+# example 
+#   spring.cloud.stream.default.contentType=application/json
+#   spring.cloud.stream.default.consumer.headerMode=none
+#   spring.cloud.stream.default.producer.partitionKeyExpression=headers.id
+### Consumer properties
+## These properties are exposed via org.springframework.cloud.stream.binder.ConsumerProperties
+## must be prefixed with spring.cloud.stream.bindings.<channelName>.consumer
+## concurrency/partitioned/headerMode/maxAttempts/backOffInitialInterval/backOffMaxInterval/backOffMultiplier/instanceIndex/instanceCount
+### Producer Properties
+## These properties are exposed via org.springframework.cloud.stream.binder.ProducerProperties
+## must be prefixed with spring.cloud.stream.bindings.<channelName>.producer.
+## partitionKeyExpression/partitionKeyExtractorClass/partitionSelectorClass/partitionSelectorExpression/partitionCount/requiredGroups/headerMode
+##
+### Binder Configuration Properties
+## These properties exposed via org.springframework.cloud.stream.config.BinderProperties
+## They must be prefixed with spring.cloud.stream.binders.<configurationName>.
+## type / inheritEnvironment / environment / defaultCandidate
+##
+### Polling Configuration Properties
+## use org.springframework.boot.autoconfigure.integration.IntegrationProperties.Poller
+
+spring.cloud.function.definition: supplier;receive1;func
+spring.cloud.stream.defaultBinder: rabbit
+pring.cloud.stream.bindings.supplier-out-0.destination: supplierTopic
+
+spring.cloud.stream.bindings.func-in-0.destination: supplierTopic
+spring.cloud.stream.bindings.func-in-0.group: funcGroup
+
+spring.cloud.stream.bindings.func-out-0.destination: funcTopic
+
+spring.cloud.stream.bindings.receive1-in-0.destination: myTopic
+spring.cloud.stream.bindings.receive1-in-0.durable-subscription: true
+spring.cloud.stream.bindings.receive1-in-0.group: myGroup1

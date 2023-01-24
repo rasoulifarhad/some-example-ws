@@ -1,0 +1,9 @@
+
+echo 'order-1' | curl -isS --location --request  POST http://localhost:8080/orders -H "Content-Type: application/json" -d @- ;echo
+echo 'customer-0' | curl -isS --location --request  POST http://localhost:8080/customers -H "Content-Type: application/json" -d @- ;echo
+
+
+echo '{"id":"customerId-1","bill-pay":"100"}' | curl --location --request  POST http://localhost:8080/withSendto -H "Content-Type: application/json" -d @-
+
+echo '{"id":"customerId-2","bill-pay":"150"}' | curl --location --request  POST http://localhost:8080/withSendto -H "Content-Type: application/json" -d @-
+

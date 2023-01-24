@@ -1,0 +1,63 @@
+{
+	"folders": [
+		{
+			"name": "demo-test-spring-autoconfig",
+			"path": "demo-test-spring-autoconfig"
+		},
+		{
+			"name": "multiple-spring-data-jpa",
+			"path": "multiple-spring-data-jpa"
+		},
+		{
+			"name": "demo-multi-spd-redis",
+			"path": "demo-multi-spd-redis"
+		},
+		{
+			"name": "spring-boot-multiredis",
+			"path": "spring-boot-multiredis"
+		},
+		{
+			"name": "testcontainers-workshop",
+			"path": "testcontainers-workshop"
+		},
+		{
+			"name": "demo-async-method",
+			"path": "demo-async-method"
+		},
+		{
+			"name": "demo-spring-data-reactive-redis",
+			"path": "demo-spring-data-reactive-redis"
+		},
+		{
+			"name": "demo-spring-boot-mongo-reactive",
+			"path": "demo-spring-boot-mongo-reactive"
+		},
+		{
+			"name": "demo-cloud-stream-webfux",
+			"path": "demo-cloud-stream-webfux"
+		},
+		{
+			"name": "demo-webflux-mongodb-crud",
+			"path": "demo-webflux-mongodb-crud"
+		},
+		{
+			"path": "reactive-ccts-banking-service"
+		},
+		{
+			"path": "reactive-ccts-user-notification-service"
+		},
+		{
+			"path": "reactive-ccts-reporting-service"
+		},
+		{
+			"path": "reactive-ccts-account-management-service"
+		},
+		{
+			"path": "demo-spring-shell"
+		}
+	],
+	"settings": {
+		"java.configuration.updateBuildConfiguration": "automatic",
+		"java.dependency.packagePresentation": "hierarchical"
+	}
+}

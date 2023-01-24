@@ -1,0 +1,18 @@
+curl -isS --location --request  POST http://localhost:8080/process -H "Content-Type: application/json" -d '{"string": 1}' ;echo
+curl -isS --location --request  POST http://localhost:8080/process -H "Content-Type: application/json" -d '{"string": 2}' ;echo
+curl -isS --location --request  POST http://localhost:8080/process -H "Content-Type: application/json" -d '{"string": 0}' ;echo
+echo '{"string": 1}' | curl -isS --location --request  POST http://localhost:8080/process -H "Content-Type: application/json" -d @- ;echo
+echo '{"string": 2}' | curl -isS --location --request  POST http://localhost:8080/process -H "Content-Type: application/json" -d @- ;echo
+echo '{"string": 0}' | curl -isS --location --request  POST http://localhost:8080/process -H "Content-Type: application/json" -d @- ;echo
+
+curl --location --request  POST http://localhost:8080/doubleIt -H "Content-Type: application/json" -d '10'
+
+echo '[0,1,1,2,3,5,8,10,21,34,55]' | curl --location --request  POST http://localhost:8080/doubleIt -H "Content-Type: application/json" -d @-
+curl -isS --location --request  POST http://localhost:8080/doubleIt -H "Content-Type: application/json" -d '[0,1,1,2,3,5,8,10,21,34,55]' ;echo
+
+echo 3 | curl --location --request  POST http://localhost:8080/produceIt -H "Content-Type: application/json" -d @- ;echo
+curl -isS --location --request  POST http://localhost:8080/produceIt -H "Content-Type: application/json" -d '3' ;echo
+
+echo '{"integer":-123}' | curl -isS --location --request  POST http://localhost:8080/logIt -H "Content-Type: application/json" -d @- ;echo
+curl -isS --location --request  POST http://localhost:8080/logIt -H "Content-Type: application/json" -d '{"integer":-123}' ;echo
+

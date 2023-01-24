@@ -1,0 +1,24 @@
+- Check connection to the MongoDB database.
+
+
+$ docker run -it  --network  mongodb-network  mongo:6.0.2 mongosh --username app_user --password app_pass --host mongodb  --authenticationDatabase app_db app_db --eval "db.adminCommand({ listDatabases: 1 })"
+
+- Create a document inside sample collection.
+
+$ docker run -it  --network  mongodb-network  mongo:6.0.2 mongosh --username app_user --password app_pass --host mongodb  --authenticationDatabase app_db app_db --eval "db.sample.insertOne({document: 'test', tags:['test'], content:'test content'})"
+
+- Retrieve the created document.
+
+$ docker run -it  --network  mongodb-network  mongo:6.0.2 mongosh --username app_user --password app_pass --host mongodb  --authenticationDatabase app_db app_db --eval "db.sample.find({document: 'test'})"
+
+- Display users that have rights for the app_db database.
+
+$ docker run -it  --network  mongodb-network  mongo:6.0.2 mongosh --username mongoadmin --password mongoadmin --host mongodb  --authenticationDatabase admin admin --eval "db.system.users.find({db: 'app_db'}).pretty()"
+
+- Display databases from the app_user point of view.
+
+$ docker run -it  --network  mongodb-network  mongo:6.0.2 mongosh --username app_user --password app_pass --host mongodb  --authenticationDatabase app_db app_db --eval "db.adminCommand({listDatabases: 1})"
+
+- Display databases from the mongoadmin point of view.
+
+$ docker run -it  --network  mongodb-network  mongo:6.0.2 mongosh --username mongoadmin --password mongoadmin --host mongodb  --authenticationDatabase admin admin --eval "db.adminCommand({listDatabases: 1})"

@@ -1,0 +1,25 @@
+#spring.application.name: customer-service
+#server.port: 8080
+logging.level.root: INFO
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+#        exclude: "env,beans"
+    jmx:
+      exposure:
+        include: "*"
+        
+spring:
+  datasource:
+    url: jdbc:h2:mem:foobardb
+    
+
+  jpa:
+    show-sql: true
+    hibernate: 
+      dialect: org.hibernate.dialect.H2Dialect
+      ddl-auto: update
+  liquibase:
+    enabled: false

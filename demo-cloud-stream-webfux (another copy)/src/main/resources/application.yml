@@ -1,0 +1,52 @@
+#spring.application.name: customer-service
+#server.port: 8080
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+#        exclude: "env,beans"
+    jmx:
+      exposure:
+        include: "*"
+        
+spring:
+  integration: 
+    poller:
+      initial-delay: 0
+      fixed-delay: 1000
+  cloud:
+    
+    function:
+      #definition: consume;supply;
+      definition: supply;toUppercase;consume
+    stream:
+       #source: toStream
+       kafka:
+        binder:
+          replication-factor: 1
+          brokers:
+          - localhost:9092
+       #input-bindings: fooin;barin
+       #output-bindings: fooout;barout      
+       bindings:
+        consume-in-0: 
+          destination: out-topic
+        supply-out-0:
+          destination: app-topic
+        toUppercase-in-0: 
+          destination: app-topic
+        toUppercase-out-0: 
+          destination: out-topic
+
+
+
+        #toUpperCase-out-0:
+          #destination: output
+          #group: consumer-group
+          #consumer:
+            #max-attempts: 3
+            #back-off-initial-interval: 100
+            #retryable-exceptions:
+              #javax.validation.ValidationException: false
+            #concurrency: 2

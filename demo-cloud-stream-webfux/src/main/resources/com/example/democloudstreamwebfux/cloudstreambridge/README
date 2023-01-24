@@ -1,0 +1,3 @@
+echo 'tesat' | curl -iSS --location --request  POST http://localhost:8080/delegateToSupplier -H "Content-Type: application/json" -d @- ;echo
+
+echo 'okkkkkkkkkkkkkkkkkkkkk' | curl -iSS --location --request  POST http://localhost:8080/delegateToDestination -H "Content-Type: application/json" -d @- ;echo

@@ -1,0 +1,145 @@
+db.createUser(
+        {
+            user: "<user for database which shall be created>",
+            pwd: "<password of user>",
+            roles: [
+                {
+                    role: "readWrite",
+                    db: "<database to create>"
+                }
+            ]
+        }
+);
+
+db = db.getSiblingDB('sample_db');
+
+db.createCollection('sample_collection');
+
+db.sample_collection.insertMany([
+ {
+    org: 'helpdev',
+    filter: 'EVENT_A',
+    addrs: 'http://rest_client_1:8080/wh'
+  },
+  {
+    org: 'helpdev',
+    filter: 'EVENT_B',
+    addrs: 'http://rest_client_2:8081/wh'
+  },
+  {
+    org: 'github',
+    filter: 'EVENT_C',
+    addrs: 'http://rest_client_3:8082/wh'
+  }  
+]);
+
+db = db.getSiblingDB('sales')
+
+db.createUser({
+  user: 'sales',
+  pwd: '$SALES_PASSWORD',
+  roles: [{ role: 'readWrite', db: 'sales' }],
+});
+db.createCollection('receipts')
+db.createCollection('documents')
+db.createCollection('invoices')
+
+db = db.getSiblingDB('warehouse')
+
+db.createUser({
+  user: 'warehouse',
+  pwd: '$WAREHOUSE_PASSWORD',
+  roles: [{ role: 'readWrite', db: 'warehouse' }],
+});
+db.createCollection('documents')
+db.createCollection('stocks')
+db.createCollection('invoices')
+db.createCollection('orders')
+
+
+// use shell command to save env variable to a temporary file, then return the contents.
+// source: https://stackoverflow.com/questions/39444467/how-to-pass-environment-variable-to-mongo-script/60192758#60192758
+function getEnvVariable(envVar, defaultValue) {
+  var command = run("sh", "-c", `printenv --null ${ envVar } >/tmp/${ envVar }.txt`);
+  // note: 'printenv --null' prevents adding line break to value
+  if (command != 0) return defaultValue;
+  return cat(`/tmp/${ envVar }.txt`)
+}
+
+// create application user and collection
+var dbUser = getEnvVariable('APP_USER', 'app_user');
+var dbPwd = getEnvVariable('APP_PWD', 'app_user()');
+var dbName = getEnvVariable('DB_NAME', 'MeanUrls');
+var dbCollectionName = getEnvVariable('DB_COLLECTION_NAME', 'Urls');
+db = db.getSiblingDB(dbName);
+db.createUser({
+  'user': dbUser,
+  'pwd': dbPwd,
+  'roles': [
+    {
+      'role': 'dbOwner',
+      'db': getEnvVariable('DB_NAME', 'MeanUrls')
+    }
+  ]
+});
+
+db.createCollection(dbCollectionName);
+
+
+version: "3"
+services:
+  mongodb:
+    container_name: mean_urls_db
+    image: mongo:latest
+    volumes:
+      - ./scripts/mongo/init/:/docker-entrypoint-initdb.d
+      - ./scripts/mongo/init:/home/mongodb
+      - ./scripts/mongo/seed/:/home/mongodb/seed
+      - mean_urls_data:/data/db
+    ports:
+      - "28017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=$MONGO_INITDB_ROOT_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD=$MONGO_INITDB_ROOT_PASSWORD
+      - APP_USER=$APP_USER
+      - APP_PWD=$APP_PWD
+      - DB_NAME=$DB_NAME
+      - DB_COLLECTION_NAME=$DB_COLLECTION_NAME
+      - MONGO_HOSTNAME=$MONGO_HOSTNAME
+volumes:
+  mean_urls_data:
+
+env
+
+MONGO_INITDB_ROOT_USERNAME=mongo_root
+MONGO_INITDB_ROOT_PASSWORD=mongo_root()
+APP_USER=app_user
+APP_PWD=app_user()
+DB_NAME=MeanUrls
+DB_COLLECTION_NAME=Urls
+MONGO_HOSTNAME=mongodb
+MONGO_PORT=28017
+
+use admin
+db.createUser(
+{
+    user: "admin",
+    pwd: "admin",
+    roles: [
+      { role: "userAdminAnyDatabase", db: "admin" },
+      { role: "readWrite", db: "admin" },
+      "readWriteAnyDatabase"
+    ]
+});
+use app_db
+db.createUser(
+{
+    user: "app_user",
+    pwd: "app_pass",
+    roles: [
+      {role: 'dbOwner',  db: 'app_db' },
+      {role: "readWrite", db: "app_db"}
+    ]
+});
+db.testcollection.insert({ artist: "Mike" });
+

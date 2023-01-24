@@ -1,0 +1,93 @@
+#spring.application.name: customer-service
+#server.port: 8080
+logging.level.root: INFO
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+#        exclude: "env,beans"
+    jmx:
+      exposure:
+        include: "*"
+spring.main.lazy-initialization: false
+
+### explicit binding creation
+# spring.cloud.stream.input-bindings: fooin;barin
+# context.getBean("fooin-in-0" , MessageChannel.class) 
+# context.getBean("barin-in-0" , MessageChannel.class) 
+# spring.cloud.stream.output-bindings: fooout;barout
+# context.getBean("fooout-out-0" , MessageChannel.class) 
+# context.getBean("barout-out-0" , MessageChannel.class) 
+#
+### Binding Service Properties
+## These properties are exposed via org.springframework.cloud.stream.config.BindingServiceProperties
+## must be prefixed with spring.cloud.stream.
+## instanceCount/instanceIndex/dynamicDestinations/defaultBinder/overrideCloudConnectors/bindingRetryInterval
+### Binding properties 
+## These properties are exposed via org.springframework.cloud.stream.config.BindingProperties
+## Binding properties are supplied using the format spring.cloud.stream.bindings.<channelName>.<property>=<value>. 
+## The <channelName> represents the name of the channel being configured (e.g., output for a Source).
+## Properties for Use of Spring Cloud Stream
+## destination /  group  /  contentType  /binder 
+### setting values for all bindings, 
+#   spring.cloud.stream.default.<property>=<value> 
+#   and 
+#   spring.cloud.stream.default.<producer|consumer>.<property>=<value>
+# example 
+#   spring.cloud.stream.default.contentType=application/json
+#   spring.cloud.stream.default.consumer.headerMode=none
+#   spring.cloud.stream.default.producer.partitionKeyExpression=headers.id
+### Consumer properties
+## These properties are exposed via org.springframework.cloud.stream.binder.ConsumerProperties
+## must be prefixed with spring.cloud.stream.bindings.<channelName>.consumer
+## concurrency/partitioned/headerMode/maxAttempts/backOffInitialInterval/backOffMaxInterval/backOffMultiplier/instanceIndex/instanceCount
+### Producer Properties
+## These properties are exposed via org.springframework.cloud.stream.binder.ProducerProperties
+## must be prefixed with spring.cloud.stream.bindings.<channelName>.producer.
+## partitionKeyExpression/partitionKeyExtractorClass/partitionSelectorClass/partitionSelectorExpression/partitionCount/requiredGroups/headerMode
+##
+### Binder Configuration Properties
+## These properties exposed via org.springframework.cloud.stream.config.BinderProperties
+## They must be prefixed with spring.cloud.stream.binders.<configurationName>.
+## type / inheritEnvironment / environment / defaultCandidate
+##
+### Polling Configuration Properties
+## use org.springframework.boot.autoconfigure.integration.IntegrationProperties.Poller
+
+#spring.cloud.stream.default.contentType: application/json
+spring.cloud.stream.source: toCustomerId-1Stream
+spring.cloud.stream.bindings.toCustomerId-1Stream-out-0.destination: dest/def/customerId-1
+# spring.cloud.stream.bindings.toCustomerId-1Stream-out-0.content-type: application/json
+
+spring.cloud.function.definition: supplierFlux;transformData;transformDataFlux;receive1;receive2;fluxReceive1;fluxReceive2
+spring.cloud.stream.defaultBinder: rabbit
+
+spring.cloud.stream.bindings.supplierFlux-out-0.destination: dest/flux/customerId-1
+
+spring.cloud.stream.bindings.transformData-in-0.destination: dest/def/customerId-1
+spring.cloud.stream.bindings.transformData-out-0.destination: dest/def/customerId-2
+
+spring.cloud.stream.bindings.transformDataFlux-in-0.destination: dest/flux/customerId-1
+spring.cloud.stream.bindings.transformDataFlux-out-0.destination: dest/flux/customerId-2
+
+spring.cloud.stream.bindings.receive1-in-0.destination: dest/def/customerId-2
+spring.cloud.stream.bindings.receive1-in-0.group:  receive-1-grp
+# spring.cloud.stream.bindings.receive1-in-0.content-type: application/json
+
+spring.cloud.stream.bindings.receive2-in-0.destination: dest/bridge/customerId-2
+spring.cloud.stream.bindings.receive2-in-0.group:  receive-2-grp
+# spring.cloud.stream.bindings.receive2-in-0.content-type: application/json
+
+spring.cloud.stream.bindings.fluxReceive1-in-0.destination: dest/flux/customerId-2
+spring.cloud.stream.bindings.fluxReceive1-in-0.group:  fluxReceive-1-grp
+spring.cloud.stream.bindings.fluxReceive2-in-0.destination: dest/fluxBridge/customerId-2
+spring.cloud.stream.bindings.fluxReceive2-in-0.group:  fluxReceive-2-grp
+
+#spring.cloud.stream.function.routing.enabled: true
+
+# spring.cloud.stream.function.bindings.process-in-0: process-input
+# spring.cloud.stream.function.bindings.process-out-0: process-output
+# spring.cloud.stream.bindings.process-input.content-type: application/json
+# spring.cloud.stream.bindings.process-output.content-type: application/json
+# spring.cloud.stream.bindings.process-input.destination: process-in-topic

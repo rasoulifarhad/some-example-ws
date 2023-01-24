@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  mongodb:
+    container_name: mongodb
+    image: mongo:6.0.2
+    #command:  --auth 
+    networks:
+      - mongodb-network    
+    environment:
+      - MONGO_INITDB_DATABASE=app_db
+      - MONGO_INITDB_ROOT_USERNAME=admin_user
+      - MONGO_INITDB_ROOT_PASSWORD=admin_pass
+    ports:
+      - 27017:27017
+      - 28017:28017
+    volumes:
+      - ./setup-mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+#      - ./data/mongodb:/data/mongodb      
+networks:
+  mongodb-network:
+    name: mongodb-network
+    driver: bridge
+
+## docker run -d --network some-network --name some-mongo \
+#	-e MONGO_INITDB_ROOT_USERNAME=mongoadmin \
+#	-e MONGO_INITDB_ROOT_PASSWORD=secret \
+#	mongo          
+## docker run -it --rm --network mongodb-network mongo:6.0.2 mongosh --host mongodb -u mongoadmin -p mongoadmin --authenticationDatabase admin mydb1          
+##docker run -it --rm mongo:6.0.2 --help
